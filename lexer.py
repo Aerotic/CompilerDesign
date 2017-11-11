@@ -3,7 +3,7 @@ import sys
 import string
 
 keywords = {}
-
+#123
 # 关键字部分
 keywords['False'] = 101
 keywords['class'] = 102
