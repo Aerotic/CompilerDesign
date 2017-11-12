@@ -128,6 +128,3 @@ class Scanner:
                 line = string + '--------' + '<{}>\n'.format(self.Dict[string])
                 f.write(line)
         f.close()
-
-
-

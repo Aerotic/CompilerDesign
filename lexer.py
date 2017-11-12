@@ -1,7 +1,7 @@
 # -*-coding:utf-8-*-
 import sys
 import string
-
+import Scanner
 keywords = {}
 
 # 关键字部分
@@ -323,20 +323,22 @@ def main():
 if __name__ == '__main__':
     main()
     result=open("result.txt",'w')
-    for i in signlist.keys():
-            if signlist[i] > 100 and signlist[i] < 136:#"%d"%signlist[i]
-                result.write("关键字 " + i+'\n')
-            elif signlist[i] > 200 and signlist[i] < 230:
-                result.write("符号 " + i+'\n')
-            elif signlist[i] < 137and signlist[i] > 134:
-                result.write("数据类型 " + i + '\n')
-            elif signlist[i]==401:
-                if i[0]=='\"':
-                    #i.strip('\"')
-                    result.write("字符串 " + i.strip('\"') + '\n')
-                if i[0]=='\'':
-                    result.write("字符 " + i.strip('\'') + '\n')
+    # for i in signlist.keys():
+    #         if signlist[i] > 100 and signlist[i] < 136:#"%d"%signlist[i]
+    #             result.write("关键字 " + i+'\n')
+    #         elif signlist[i] > 200 and signlist[i] < 230:
+    #             result.write("符号 " + i+'\n')
+    #         elif signlist[i] < 137and signlist[i] > 134:
+    #             result.write("数据类型 " + i + '\n')
+    #         elif signlist[i]==401:
+    #             if i[0]=='\"':
+    #                 #i.strip('\"')
+    #                 result.write("字符串 " + i.strip('\"') + '\n')
+    #             if i[0]=='\'':
+    #                 result.write("字符 " + i.strip('\'') + '\n')
+    #
+    #         else:
+    #             result.writelines("变量 " + i+'\n')
+    scanner=Scanner.Scanner("result.txt","example .txt",)
 
-            else:
-                result.writelines("变量 " + i+'\n')
     result.close()
