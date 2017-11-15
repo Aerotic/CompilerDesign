@@ -1,52 +1,41 @@
 # coding=utf-8
 # import sys
 # sys.setdefaultencoding('utf-8')
-letter = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-number = '0123456789'
-operater = '+-*/()'
-class syntax:
-    def __init__(self):
-        # print '\n语义分析结果(四元式):'
 
+class syntax:
+    def __init__(self,tab,dic):
+        print '\n语义分析结果(四元式):'
+        self.quad = []
+        self.Quaternions=[]
+        self.quaternion=()
         # self.getStack(stack)#获取单词栈
         # self.getDict(dict)#获取字典
-        self.dic={}
-        self.tab=[]
-        self.quad = []
-        # self.i = 0  # 栈指针
-        # self.flag = 0  # 记录临时变量T数目
-        # self.m()
-        self.cnt=0
-        self.i=0
-        self.flag=0
-        # for i in self.quad:  # 输出四元式结果
-        #     print i
-    def SyntaxAnalysis(self,tab,dic):
-        self.quad = []
-        self.i=0
-        self.flag=self.cnt
-        self.cnt+=1
         self.dic=dic
         self.tab=tab
+        self.i = 0  # 栈指针
+        self.flag = 0  # 记录临时变量T数目
         self.m()
-        print "cnt is",self.cnt,"\n"
-        for j in self.quad:  # 输出四元式结果
-            print j
+
+        for i in self.quad:  # 输出四元式结果
+            print i
+    def getStack(stack):
+        table=stack
+    def getDict(dict):
+        dic=dict
     def m(self):  # PM程序
-        if len(self.tab)>self.i:
-            if (self.tab[self.i] == '+'):
-                self.i += 1
-                ret1 = self.e()
-                self.quad.append('(+,0,' + ret1 + ',out)')
-                self.flag += 1
-            elif (self.tab[self.i] == '-'):
-                self.i += 1
-                ret2 = self.e()
-                self.quad.append('(-,0,' + ret2 + ',out)')
-                self.flag += 1
-            else:
-                ret3 = self.e()
-                self.quad.append('(=,' + ret3 + ',0,out)')
+        if (self.tab[self.i] == '+'):
+            self.i += 1
+            ret1 = self.e()
+            self.quad.append('(+,0,' + ret1 + ',out)')
+            self.flag += 1
+        elif (self.tab[self.i] == '-'):
+            self.i += 1
+            ret2 = self.e()
+            self.quad.append('(-,0,' + ret2 + ',out)')
+            self.flag += 1
+        else:
+            ret3 = self.e()
+            self.quad.append('(=,' + ret3 + ',0,out)')
 
     def e(self):  # PE程序
         ret1 = self.t()
@@ -130,3 +119,8 @@ class syntax:
             temp = self.i
             self.i += 1
             return self.tab[temp]
+    def toQuaternion(self):
+        for i in self.quad:
+            self.quaternion=(i[1],i[3],i[5],i[7])
+            self.Quaternions.append(self.quaternion)
+        pass
