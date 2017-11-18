@@ -1,60 +1,50 @@
 # coding=utf-8
 # import sys
 # sys.setdefaultencoding('utf-8')
-letter = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-number = '0123456789'
-operater = '+-*/()'
+
 class syntax:
     def __init__(self):
-        # print '\n语义分析结果(四元式):'
-
-        # self.getStack(stack)#获取单词栈
-        # self.getDict(dict)#获取字典
         self.dic={}
         self.tab=[]
         self.quad = []
-        # self.i = 0  # 栈指针
-        # self.flag = 0  # 记录临时变量T数目
-        # self.m()
         self.cnt=0
         self.i=0
         self.flag=0
-        # for i in self.quad:  # 输出四元式结果
-        #     print i
-    def SyntaxAnalysis(self,tab,dic):
+    def SyntaxAnalysis(self,tab,head,dic):
         self.quad = []
         self.i=0
         self.flag=self.cnt
-        self.cnt+=1
         self.dic=dic
         self.tab=tab
+        self.head=head
         self.m()
+        self.cnt+=self.flag
         print "cnt is",self.cnt,"\n"
-        for j in self.quad:  # 输出四元式结果
-            print j
+        return self.quad
     def m(self):  # PM程序
         if len(self.tab)>self.i:
             if (self.tab[self.i] == '+'):
-                self.i += 1
                 ret1 = self.e()
-                self.quad.append('(+,0,' + ret1 + ',out)')
+                self.quad.append('(+,0,' + ret1 + ","+self.head+")")
                 self.flag += 1
+                # self.cnt+=1
             elif (self.tab[self.i] == '-'):
                 self.i += 1
                 ret2 = self.e()
-                self.quad.append('(-,0,' + ret2 + ',out)')
+                self.quad.append('(-,0,' + ret2 +","+ self.head+")")
                 self.flag += 1
+                # self.cnt += 1
             else:
                 ret3 = self.e()
-                self.quad.append('(=,' + ret3 + ',0,out)')
+                self.quad.append('(:=,' + ret3 +", ,"+self.head+")")
 
     def e(self):  # PE程序
         ret1 = self.t()
         ret2, ret3 = self.e1()
         if (ret2 != '&'):  # 若ret2不为&，则可以产生四元式，否则将变量传递给父项
             self.flag += 1
-            self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',T' + str(self.flag) + ')')
-            return 'T' + str(self.flag)
+            self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',t' + str(self.flag) + ')')
+            return 't' + str(self.flag)
         else:
             return ret1
 
@@ -67,8 +57,8 @@ class syntax:
                 return '+', ret1
             else:
                 self.flag += 1
-                self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',T' + str(self.flag) + ')')
-                return '+', 'T' + str(self.flag)
+                self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',t' + str(self.flag) + ')')
+                return '+', 't' + str(self.flag)
         elif (self.tab[self.i] == '-'):
             self.i += 1
             ret1 = self.t()
@@ -77,7 +67,7 @@ class syntax:
                 return '-', ret1
             else:
                 self.flag += 1
-                self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',T' + str(self.flag) + ')')
+                self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',t' + str(self.flag) + ')')
                 return '-', 'T' + str(self.flag)
         else:
             return '&', '&'
@@ -87,8 +77,8 @@ class syntax:
         ret2, ret3 = self.t1()
         if (ret2 != '&'):
             self.flag += 1
-            self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',T' + str(self.flag) + ')')
-            return 'T' + str(self.flag)
+            self.quad.append('(' + ret2 + ',' + ret1 + ',' + ret3 + ',t' + str(self.flag) + ')')
+            return 't' + str(self.flag)
         else:
             return ret1
 
