@@ -2,8 +2,6 @@
 # import sys
 # sys.setdefaultencoding('utf-8')
 
-import generate_table
-
 tmp_sentence = []
 tmp_exp = []
 simpleDict = {}
@@ -18,14 +16,19 @@ ErrorCode['expect .'] = 19
 ErrorCode['expect END'] = 10
 ErrorCode['Expression Error'] = 77
 
-class syntax:
-    def __init__(self):
+class quaternion:
+    def __init__(self,tableDict,scanDict,str):
         self.dic={}
         self.tab=[]
         self.quad = []
         self.cnt=0
         self.i=0
         self.flag=0
+        self.tableDict=tableDict
+        print "*************************************************************************"
+        self.scanDict=scanDict
+        self.str=str
+        print self.str
     def SyntaxAnalysis(self,tab,head,dic):
         self.quad = []
         self.i=0# 栈指针
@@ -33,9 +36,8 @@ class syntax:
         self.dic=dic
         self.tab=tab
         self.head=head
-        self.m()
+        self.m(head)
         self.cnt+=self.flag
-        print "cnt is",self.cnt,"\n"
         # j=self.quad[0]
         # s="asd"
         # print j[:len(j)-4]+head+")"
@@ -43,22 +45,23 @@ class syntax:
         return self.quad
         # for j in self.quad:  # 输出四元式结果
         #     print j
-    def m(self):  # PM程序
+    def m(self,head=''):  # PM程序
         if len(self.tab)>self.i:
             if (self.tab[self.i] == '+'):
                 ret1 = self.e()
-                self.quad.append('(+,0,' + ret1 + ","+self.head+")")
+                self.quad.append('(+,0,' + ret1 + ","+head+")")
                 self.flag += 1
                 # self.cnt+=1
             elif (self.tab[self.i] == '-'):
                 self.i += 1
                 ret2 = self.e()
-                self.quad.append('(-,0,' + ret2 +","+ self.head+")")
+                self.quad.append('(-,0,' + ret2 +","+ head+")")
                 self.flag += 1
                 # self.cnt += 1
             else:
                 ret3 = self.e()
-                self.quad.append('(:=,' + ret3 +", ,"+self.head+")")
+                if  ret3:
+                    self.quad.append('(:=,' + ret3 +", ,"+head+")")
 
     def e(self):  # PE程序
         ret1 = self.t()
@@ -178,7 +181,7 @@ class syntax:
                 tmplist.append(tmpS)
                 tmpS = []
                 continue
-            if (tmpword not in t.Dict.keys()) & (t.Scan.Dict[tmpword] == '00'):
+            if (tmpword not in self.tableDict.keys()) & (self.scanDict[tmpword] == '00'):
                 print "Error:Undefined Identifier \"", tmpword, "\"\n"
                 exit(ErrorCode['Undefined Identifier'])
             tmpS.append(tmpword)
@@ -199,11 +202,11 @@ class syntax:
     def getSimpleDict(self,tmp1):
         simple_dict = {}
         for i in tmp1:
-            if not t.Scan.Dict.has_key(i):
+            if not self.scanDict.has_key(i):
                 continue
-            if t.Scan.Dict[i] == '00':
+            if self.scanDict[i] == '00':
                 simple_dict[i] = 1
-            elif t.Scan.Dict[i] == '03':
+            elif self.scanDict[i] == '03':
                 simple_dict[i] = 2
             else:
                 simple_dict[i] = 3
@@ -215,7 +218,17 @@ class syntax:
         for cnter in range(len(exp)):
             exptmp, exphead = self.getExpression(exp[cnter])
             result += self.SyntaxAnalysis(exptmp, exphead, self.getSimpleDict(exp[cnter]))
+        # print result
         return result
-    def getQuaternions(self,text):
-        t
+    def getQuaternions(self):
+        # self.table.Dict=TableDict
+        # self.Table.Scan.Dict=Table.Scan.Dict
+        # self.TableStrings=TableStrings
+        rawSentences = self.getRawSentence(self.str)
+        print rawSentences
+        SentenceList = self.getSingleSentence(rawSentences)
+        quaternions=self.getQuaternion(SentenceList)
+        print quaternions
+        # print self.getQuaternion(SentenceList)
+        # return self.getQuaternion(SentenceList)
         pass
